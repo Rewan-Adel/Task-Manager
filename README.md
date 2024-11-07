@@ -12,7 +12,7 @@ The API allows users to manage tasks with basic functionalities like creating, u
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js 
 - MongoDB (Local or MongoDB Atlas)
 - Postman (for testing API endpoints)
 
