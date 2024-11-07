@@ -34,7 +34,7 @@ Create a .env file in the root directory and add the following:
 
    ```bash
    PORT=port
-   MONGODB_URI= your_db_URI
+   DB_CONNECTION= your_db_URI
    JWT_SECRET=your_secret_key
    ```
 
