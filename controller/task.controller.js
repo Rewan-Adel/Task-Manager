@@ -12,6 +12,7 @@ exports.createTask = async (req, res) => {
         const task = new Task({
             title: value.title, 
             status: value.status || 'incomplete',
+            description: value.description,
             userID: _id
         });
         await task.save();

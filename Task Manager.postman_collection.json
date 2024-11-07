@@ -2,13 +2,13 @@
 	"info": {
 		"_postman_id": "98b18ca9-cdc6-45ba-9cec-2e4382503210",
 		"name": "Task Manager",
-		"description": "# 🎯Task Manager API\n\nThis is a simple Task Management API built with Node.js, Express, and MongoDB. The API allows users to manage tasks with basic functionalities like creating, updating, deleting, and retrieving tasks.",
+		"description": "# 🎯Task Manager API\n\nThis is a simple Task Manager API built with Node.js, Express, and MongoDB. The API allows users to manage tasks with basic functionalities like creating, updating, deleting, and retrieving tasks.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25350743"
 	},
 	"item": [
 		{
-			"name": "User Auth",
+			"name": "User Authentication",
 			"item": [
 				{
 					"name": "Signup",
@@ -70,11 +70,23 @@
 					"name": "logout",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/auth/logout",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						}
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "### 1\\. Signup (Register a New User)\n\n- **Method**: `POST`\n    \n- **URL**: `http://localhost:8000/api/auth/signup`\n    \n- **Body** (JSON):\n    \n\n``` json\n{\n \"name\": \"User Name\",\n \"email\": \"user@example.com\",\n \"password\": \"password123\" \n}\n\n ```\n\n**Expected Response**:\n\n``` json\n{\n  \"status\": \"success\",\n  \"code\": 201,\n  \"message\": \"User registered successfully\",\n  \"token\": \"your_jwt_token\",\n   \"data\": {\n        \"user\": {\n            \"username\": \"Username\",\n            \"email\": \"user@example.com\",\n            \"_id\": \"\",\n            \"createdAt\": \"\",\n            \"updatedAt\": \"\"\n        }\n    }\n}\n\n ```\n\n### 2\\. Login\n\n- **Method**: `POST`\n    \n- **URL**: `http://localhost:8000/api/auth/login`\n    \n- **Body** (JSON):\n    \n\n``` json\n{\n \"email\": \"user@example.com\",\n \"password\": \"password123\" \n}\n\n ```\n\n- **Expected Response**\n    \n\n``` json\n{\n  \"status\": \"success\",\n  \"code\": 200,\n  \"message\":\"login successfully\",\n  \"token\": \"your_jwt_token\",\n  \"data\": {\n        \"user\": {\n            \"username\": \"Username\",\n            \"email\": \"user@example.com\",\n            \"_id\": \"\",\n            \"createdAt\": \"\",\n            \"updatedAt\": \"\"\n        }\n    }\n}\n\n ```\n\n### 3\\. Logout\n\n- **Method**: GET\n    \n- **URL**: `http://localhost:8000/api/auth/logout`\n    \n- **Headers**:\n    \n    - `Authorization`: `Bearer`\n        \n- **Expected Responsedy** (JSON):\n    \n\n``` json\n{\n    \"status\": \"success\",\n    \"code\": 200,\n    \"message\": \"logout successfully\"\n}\n\n ```"
 		},
 		{
 			"name": "Task Management",
@@ -86,7 +98,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\":\"\",\r\n    \"description\":\"\", //opitional\r\n    \"status\":\"\" //defualt is incomplete\r\n}",
+							"raw": "{\r\n    \"title\":\"\",\r\n    \"description\":\"\", //opitional\r\n    \"status\":\"incomplete\" //defualt value\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -114,7 +126,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    //\"title\":\"\"\r\n  //  \"description\":\"\", \r\n}",
+							"raw": "{\r\n    \"title\":\"\"\r\n   //,\"description\":\"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -162,7 +174,7 @@
 							"variable": [
 								{
 									"key": "taskID",
-									"value": "672c9f0f6b81ddecacb033ed"
+									"value": ""
 								}
 							]
 						}
@@ -263,240 +275,33 @@
 					"response": []
 				},
 				{
-					"name": "Mark as Complete",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/task/mark/complete/:taskID",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"task",
-								"mark",
-								"complete",
-								":taskID"
-							],
-							"variable": [
-								{
-									"key": "taskID",
-									"value": "672c9f0f6b81ddecacb033ed"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Mark as Incomplete",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/task/mark/incomplete/:taskID",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"task",
-								"mark",
-								"incomplete",
-								":taskID"
-							],
-							"variable": [
-								{
-									"key": "taskID",
-									"value": "672c9f0f6b81ddecacb033ed"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Mark Task",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/task/mark/:taskID",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"task",
+								"mark",
+								":taskID"
+							],
+							"variable": [
+								{
+									"key": "taskID",
+									"value": ""
+								}
+							]
+						}
 					},
 					"response": []
 				}
-			]
-		},
-		{
-			"name": "Get data",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
 			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/info?id=1",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"info"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "1"
-						}
-					]
-				},
-				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
-			},
-			"response": []
-		},
-		{
-			"name": "Post data",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Successful POST request\", function () {",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-							"});",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{base_url}}/info",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"info"
-					]
-				},
-				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
-			},
-			"response": []
-		},
-		{
-			"name": "Update data",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Successful PUT request\", function () {",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
-							"});",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{base_url}}/info?id=1",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"info"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "1"
-						}
-					]
-				},
-				"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
-			},
-			"response": []
-		},
-		{
-			"name": "Delete data",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Successful DELETE request\", function () {",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);",
-							"});",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{base_url}}/info?id=1",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"info"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "1"
-						}
-					]
-				},
-				"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
-			},
-			"response": []
+			"description": "### 1\\. Create Task\n\n- **Method**: `POST`\n    \n- **URL**: `http://localhost:8000/api/task/create`\n    \n- **Headers:**\n    \n    - `Authorization`: `Bearer`\n        \n- **Body** (JSON):\n    \n\n``` json\n{  \n  \"title\": \"Sample Task\",\n   \"description\":\"\", //opitional\n   \"status\": \"completed\"  // optional, default is \"incomplete\"\n}\n\n ```\n\n- **Expected Response**\n    \n\n``` json\n{\n \"status\": \"success\",\n \"code\": 201,\n \"message\": \"Task created successfully\",\n \"task\": { \n   \"userID\": \"objectId\",\n        \"title\": \"taskTitle\",\n        \"status\": \"incomplete\",\n        \"description\":\"your_description\",\n        \"_id\": \"objectId\",\n        \"createdAt\": \"2024-11-07T12:19:48.635Z\",\n        \"updatedAt\": \"2024-11-07T12:19:48.635Z\",\n }\n}\n\n ```\n\n---\n\n### 2\\. Get All Tasks\n\n- **Method**: `GET`\n    \n- **URL**: `http://localhost:8000/api/task/get/all`\n    \n- **Headers**:\n    \n    - `Authorization`: `Bearer`\n        \n- **Expected Response**\n    \n\n``` json\n{\n \"status\": \"success\",\n \"code\": 200,\n \"totalTasks\": <number_of_tasks>,\n \"task\": [{ \n   \"userID\": {\n            \"_id\": \"objectId\",\n            \"username\": \"Username\",\n            \"email\": \"example@gmail.com\"\n        },,\n        \"title\": \"taskTitle\",\n        \"status\": \"incomplete\",\n         \"description\":\"your_description\",\n        \"_id\": \"objectId\",\n        \"createdAt\": \"2024-11-07T12:19:48.635Z\",\n        \"updatedAt\": \"2024-11-07T12:19:48.635Z\",\n },{...}\n]\n}\n\n ```\n\n---\n\n### 3\\. Get One Task\n\n- **Method**: `GET`\n    \n- **URL**: `http://localhost:8000/api/task/get/one:taskID`\n    \n- **Headers**:\n    \n    - `Authorization`: `Bearer`\n        \n- **Expected Response**\n    \n\n``` json\n{\n \"status\": \"success\",\n \"code\": 200,\n \"message\": \"Task retrieved successfully\",\n \"task\": { \n   \"userID\": {\n            \"_id\": \"objectId\",\n            \"username\": \"Username\",\n            \"email\": \"example@gmail.com\"\n        },,\n        \"title\": \"taskTitle\",\n        \"status\": \"incomplete\",\n         \"description\":\"your_description\",\n        \"_id\": \"objectId\",\n        \"createdAt\": \"2024-11-07T12:19:48.635Z\",\n        \"updatedAt\": \"2024-11-07T12:19:48.635Z\",\n }\n}\n\n ```\n\n---\n\n### 4\\. Update Task\n\n- **Method**: PUT\n    \n- **URL**: `http://localhost:8000/api/task/update/:taskID`\n    \n- **Headers**:\n    \n    - `Authorization`: `Bearer`\n        \n- Body (JSON):\n    \n\n``` json\n{\n  \"title\": \"Updated Task Title\",\n  \"status\": \"completed\"  // or \"incomplete\"\n}\n\n ```\n\n- **Expected Response:**\n    \n\n``` json\n{\n \"status\": \"success\",\n \"code\": 200,\n \"message\": \"Task updated successfully\",\n \"task\": { \n    \"userID\": {\n            \"_id\": \"objectId\",\n            \"username\": \"Username\",\n            \"email\": \"example@gmail.com\"\n        },,\n        \"title\": \"taskTitle\",\n        \"status\": \"incomplete\",\n         \"description\":\"your_description\",\n        \"_id\": \"objectId\",\n        \"createdAt\": \"2024-11-07T12:19:48.635Z\",\n        \"updatedAt\": \"2024-11-07T12:19:48.635Z\",\n }\n}\n\n ```\n\n---\n\n### 5\\. Delete Task\n\n- **Method**: `DELETE`\n    \n- **URL**: `http://localhost:8000/api/task/delete/one/:taskID`\n    \n- **Headers**:\n    \n    - `Authorization`: `Bearer`\n        \n- **Expected Response:**\n    \n\n``` json\n{\n  \"status\": \"success\",\n  \"code\": 200,\n  \"message\": \"Task deleted successfully\"\n}\n\n ```\n\n---\n\n### 6\\. Delete All Tasks\n\n- **Method**: `DELETE`\n    \n- **URL**: `http://localhost:8000/api/task/delete/all`\n    \n- **Headers**:\n    \n    - `Authorization`: `Bearer`\n        \n- **Expected Response:**\n    \n\n``` json\n{ \n\"status\": \"success\",\n \"code\": 200, \n \"message\": \"All tasks deleted successfully\"\n}\n\n ```\n\n---\n\n### 7\\. Get Tasks by Status\n\n- **Method**: `GET`\n    \n- **URL**: `http://localhost:8000/api/task/status/:status`\n    \n    - Replace `:status` with `completed` or `incomplete`.\n        \n- **Headers**:\n    \n    - `Authorization`: `Bearer`\n        \n- **Expected Response**\n    \n\n``` json\n{ \n\"status\": \"success\",\n \"code\": 200,\n \"totalTasks\": ,\n \"task\": [{ \n   \"userID\": {\n            \"_id\": \"objectId\",\n            \"username\": \"Username\",\n            \"email\": \"example@gmail.com\"\n        },,\n        \"title\": \"taskTitle\",\n        \"status\": \"incomplete\",\n         \"description\":\"your_description\",\n        \"_id\": \"objectId\",\n        \"createdAt\": \"2024-11-07T12:19:48.635Z\",\n        \"updatedAt\": \"2024-11-07T12:19:48.635Z\",\n },{...}\n]\n}\n\n ```\n\n---\n\n### 8\\. Mark Task (Toggle Status)\n\n- **URL**: `http://localhost:8000/api/task/mark/:taskID`\n    \n- **Headers**:\n    \n    - `Authorization`: `Bearer`\n        \n- **Expected Response**\n    \n\n``` json\n{ \n \"status\": \"success\",\n \"code\": 200, \"message\": \"Task marked as \", // \"completed\" or \"incomplete\" \n \"task\": { \n    \"userID\": {\n            \"_id\": \"objectId\",\n            \"username\": \"Username\",\n            \"email\": \"example@gmail.com\"\n        },,\n        \"title\": \"taskTitle\",\n        \"status\": \"incomplete\",\n         \"description\":\"your_description\",\n        \"_id\": \"objectId\",\n        \"createdAt\": \"2024-11-07T12:19:48.635Z\",\n        \"updatedAt\": \"2024-11-07T12:19:48.635Z\",\n }\n}\n\n ```"
 		}
 	],
 	"event": [

@@ -21,8 +21,7 @@ router.get('/get/one/:taskID', getOneTask);
 router.get('/filter/:status', getTasksByStatus);
 // router.get('/mark/complete/:taskID', markTaskAsComplete);
 // router.get('/mark/incomplete/:taskID', markTaskAsIncomplete);
-router.get('/mark/:taskID', markTask);
-
+router.put('/mark/:taskID', markTask);
 router.put('/update/:taskID', updateTask);
 
 router.delete('/delete/one/:taskID', deleteTask);
