@@ -1,5 +1,5 @@
 const Task = require('../model/task.model');
-const { serverErrorMessage, badRequestMessage } = require('../middleware/error.messages.middleware');
+const { serverErrorMessage, badRequestMessage, unAuthorizedMessage } = require('../middleware/error.messages.middleware');
 const { taskValidation } = require('../util/task.validation');
 const mongoose = require('mongoose');
 
@@ -53,9 +53,13 @@ exports.getOneTask = async (req, res) => {
         if(!mongoose.Types.ObjectId.isValid(taskID))
             return badRequestMessage('Invalid task ID', res);
 
-        const task = await Task.findById(taskID).populate('userID', 'username email');
+        const task = await Task.findById(taskID);
         if(!task){
             return badRequestMessage('Task not found', res);
+        };
+
+        if(task.userID.toString() !== req.user._id.toString()){
+            return unAuthorizedMessage('You do not have permission to view this task', res);
         }
         return res.status(200).json({
             status: 'success',
@@ -76,10 +80,17 @@ exports.updateTask = async (req, res) => {
         if(!mongoose.Types.ObjectId.isValid(taskID))
             return badRequestMessage('Invalid task ID', res);
 
-        const task = await Task.findByIdAndUpdate(taskID, req.body, {new: true}).populate('userID', 'username email');
+        let task = await Task.findById(taskID);
         if(!task){
             return badRequestMessage('Task not found', res);
+        };
+
+        if(task.userID.toString() !== req.user._id.toString()){
+            return unAuthorizedMessage('You do not have permission to view this task', res);
         }
+
+        task = await Task.findByIdAndUpdate(taskID, req.body, {new: true}).populate('userID', 'username email');
+
 
         return res.status(200).json({
             status: 'success',
@@ -101,11 +112,18 @@ exports.deleteTask = async (req, res) => {
         if(!mongoose.Types.ObjectId.isValid(taskID))
             return badRequestMessage('Invalid task ID', res);
 
-        const task =  await Task.findByIdAndDelete(taskID);
+        let task = await Task.findById(taskID);
         if(!task){
             return badRequestMessage('Task not found', res);
+        };
+
+        if(task.userID.toString() !== req.user._id.toString()){
+            return unAuthorizedMessage('You do not have permission to view this task', res);
         }
-       
+
+        task = await Task.findByIdAndDelete(taskID);
+
+
         return res.status(200).json({
             status: 'success',
             code: 200,
@@ -162,10 +180,14 @@ try{
     if(!mongoose.Types.ObjectId.isValid(taskID))
         return badRequestMessage('Invalid task ID', res);
 
-    const task = await Task.findById(taskID);
+    let task = await Task.findById(taskID);
     if(!task){
         return badRequestMessage('Task not found', res);
     };
+
+    if(task.userID.toString() !== req.user._id.toString()){
+        return unAuthorizedMessage('You do not have permission to view this task', res);
+    }
 
     if(task.status == 'incomplete'){
         task.status = 'completed';
@@ -231,4 +253,3 @@ catch(error){
 //     return serverErrorMessage(error, res);
 // }
 // };
-
