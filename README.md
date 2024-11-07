@@ -26,7 +26,7 @@ git clone https://github.com/Rewan-Adel/Task-Manager.git
 ```
 ### 2.Navigate into the project directory:
    ```bash
-   cd <project-directory>
+   cd Task-Manager
    ```
 ###  3. Set Up Environment Variables
 
