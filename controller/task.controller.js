@@ -57,7 +57,7 @@ exports.getOneTask = async (req, res) => {
         if(!task){
             return badRequestMessage('Task not found', res);
         };
-
+        console.log(task.userID.toString(), req.user._id.toString());
         if(task.userID.toString() !== req.user._id.toString()){
             return unAuthorizedMessage('You do not have permission to view this task', res);
         }
